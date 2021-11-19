@@ -1,21 +1,48 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { HomeScreen } from "./screens/Home/Home.screen";
+import { useFonts } from "expo-font";
+import { ChooseDeseaseScreen } from "./screens/ChooseDesease/ChooseDesease.screen";
+import { WorkoutsScreen } from "./screens/Workouts/Workouts.screen";
+
+export type StackParamList = {
+    Home: undefined;
+    ChooseDesease: undefined;
+    Workouts: { id: number | null };
+};
+
+const Stack = createNativeStackNavigator<StackParamList>();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    const [loaded] = useFonts({
+        "Montserrat-regular": require("./assets/fonts/Montserrat/Montserrat-Regular.ttf"),
+        "Montserrat-medium": require("./assets/fonts/Montserrat/Montserrat-Medium.ttf"),
+    });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    if (!loaded) {
+        return null;
+    }
+
+    return (
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Home"
+                    component={HomeScreen}
+                />
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="ChooseDesease"
+                    component={ChooseDeseaseScreen}
+                />
+                <Stack.Screen
+                    options={{ headerShown: false }}
+                    name="Workouts"
+                    component={WorkoutsScreen}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+}
